@@ -1,7 +1,7 @@
 # ALFIX #
 
-Alfix is an open-source web-based viewer for the eLearn workshop manuals
-for various Alfa Romeo, Lancia and Fiat cars.
+Alfix is an [open-source](COPYING.md) web-based viewer for the eLearn
+workshop manuals for various Alfa Romeo, Lancia and Fiat cars.
 
 ## Software requirements ##
 
@@ -80,7 +80,8 @@ shown in some points. And of course there might be other bugs.
 And finally, at best Alfix can only be as correct as the source data
 on eLearn. There are bugs, typos and other mistakes in it too.
 
-Bug reports and feature requests on the GitLab issue tracker are
+Some known issues and future plans are listed in the project [TODO](TODO.md).
+Bug reports and other feature requests on the GitLab issue tracker are
 welcome, just keep in mind this is a hobby project done on my scarce
 free time and resources.
 
