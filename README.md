@@ -9,11 +9,11 @@ This section lists the external software dependencies of this project.
 
 First of all, you will need an eLearn CD or an image of of one.
 eLearn is proprietary software which you need to purchase yourself,
-don't ask me for a copy or help finding one. At the moment only
+don't ask me for a copy or help on finding one. At the moment only
 Alfa 156 eLearn has been tested. In theory others should work too
 but see the section on bugs, todo etc.
 
-The rest is free software like Alfix. versions noted in parentheses
+The rest is free software like Alfix. The versions noted in parentheses
 reflect what was used and tested during development on Fedora Linux.
 Other versions might work just as well or even better. Or not.
 
@@ -45,9 +45,9 @@ with Firefox running on local computer so for anything else YMMV.
 
 ## Installation ##
 
-Replace <path-to-cd> with the path your CD or iso-image is mounted.
+Replace `<path-to-cd>` with the path your CD or iso-image is mounted.
 For example, by default Fedora 24 mounts Alfa 156 eLearn CD at
-"/run/media/${USER}/Alfa Romeo 156"
+`"/run/media/${USER}/Alfa Romeo 156"`
 
     $ git clone https://gitlab.com/pmatilai/alfix.git
     $ cd alfix
@@ -83,5 +83,7 @@ Bug reports and feature requests on the GitLab issue tracker are
 welcome, just keep in mind this is a hobby project done on my scarce
 free time and resources.
 
-	Panu Matilainen <pmatilai@laiskiainen.org>
+## Authors
+
+* Panu Matilainen <pmatilai@laiskiainen.org>
 
