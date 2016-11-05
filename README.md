@@ -61,6 +61,7 @@ after the initial setup.
 
 Once the setup has successfully completed (mind you it is not very
 error tolerant at this point), running the software is simply:
+
     $ ./alfix.py
 
 On startup it prints its address on standard output, which by default is
