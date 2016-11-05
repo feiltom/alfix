@@ -79,3 +79,9 @@ shown in some points. And of course there might be other bugs.
 And finally, at best Alfix can only be as correct as the source data
 on eLearn. There are bugs, typos and other mistakes in it too.
 
+Bug reports and feature requests on the GitLab issue tracker are
+welcome, just keep in mind this is a hobby project done on my scarce
+free time and resources.
+
+	Panu Matilainen <pmatilai@laiskiainen.org>
+
