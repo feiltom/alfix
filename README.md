@@ -43,6 +43,10 @@ with Firefox running on local computer so for anything else YMMV.
 
 * a modern web browser (firefox >= 49)
 
+Do not expose Alfix to the public internet! It is not written to even
+try to be secure in any way, and almost certainly have no permission to
+share the eLearn content to anybody else.
+
 ## Installation ##
 
 Replace `<path-to-cd>` with the path your CD or iso-image is mounted.
