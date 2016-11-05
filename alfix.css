@@ -1,0 +1,79 @@
+
+a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.menutxt {
+    color: white;
+}
+
+.labeltxt {
+    color: white;
+    font-weight: bold;
+}
+
+td.menutxt:hover {
+    background-color: rgb(220,70,70);
+}
+
+td.body_table{
+    border: 1px solid rgb(206,0,0);
+    padding: 3px;
+    text-align:left;
+    width:1%;
+}
+
+td.header_table{
+    background-color:rgb(194,189,189);
+    border: 1px solid rgb(206,0,0);
+    padding: 3px;
+    text-align:center;
+    width:1%;
+}
+
+#maintable {
+    width: 100%;
+}
+
+#toprow {
+    height: 64px;
+}
+
+#logobar {
+    width: 20%;
+    border-top-left-radius: 15px;
+    background-color: rgb(206,0,0);
+    font-size: 32px;
+    font-style: italic;
+    text-align: center;
+    text-shadow: 3px 3px black;
+    text-transform: uppercase;
+    color: white;
+    vertical-align: center;
+}
+
+#menubar {
+    width: 80%;
+    background: linear-gradient(to right,
+				#555555 0%,
+				#0a0a0a 67%,
+				#1b1b1b 100%
+				);
+}
+
+#pathrow {
+    background-color: rgb(206,0,0);
+    height: 32px;
+}
+
+#sections {
+    background-color: rgb(206,0,0);
+    vertical-align: top;
+}
+
+#contents {
+    vertical-align: top;
+    background-color: white;
+    border: 0px;
+}
