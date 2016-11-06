@@ -25,6 +25,15 @@ Software required only during setup:
 * innoextract (>= 1.6)
 * dos2unix (>= 7.3.3)
 
+Recommended:
+* git (>= 2.7.4)
+
+At this point in development there are no releases made and
+things can evolve on daily basis, so it is best to download
+the actual source code repository and update often. But if
+git is a problem for whatever reason, you can also download
+the source as a zip or tar archive from gitlab repository page.
+
 ### Running ###
 
 Software required for running the application server:
@@ -54,7 +63,7 @@ share the eLearn content to anybody else.
 On Fedora (>= 24) installing this should ensure you have everything
 needed to setup and run the software:
 
-    # dnf install python3-lxml innoextract mdbtools sqlite dos2unix firefox
+    # dnf install git python3-lxml innoextract mdbtools sqlite dos2unix firefox
 
 ### Installing Alfix
 
@@ -78,7 +87,7 @@ error tolerant at this point), running the software is simply:
     $ ./alfix.py
 
 On startup it prints its address on standard output, which by default is
-http://localhost:8080/ - point your browser there and enjoy.
+http://localhost:8000/ - point your browser there and enjoy.
 
 ## Bugs, todo and all ##
 
@@ -92,6 +101,9 @@ features at the moment which might result in incorrect information
 shown in some points. And of course there might be other bugs.
 And finally, at best Alfix can only be as correct as the source data
 on eLearn. There are bugs, typos and other mistakes in it too.
+If you notice a problem then please make sure you're running the
+latest available version of the code before reporting it:
+do `git pull` and restart Alfix.
 
 Some known issues and future plans are listed in the project [TODO](TODO.md).
 Bug reports and other feature requests on the GitLab issue tracker are
