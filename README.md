@@ -39,15 +39,22 @@ As Alfix is basically a custom web server for the eLearn content,
 it is technically possible to run it on a headless server and browse the
 contents on any arbitrary web client, including tablets, mobile phones,
 text-only clients and whatnot. At the moment it has been only tested
-with Firefox running on local computer so for anything else YMMV. 
+with Firefox running on local computer so for anything else YMMV,
+and you'd have to modify the source to try it.
 
 * a modern web browser (firefox >= 49)
 
-Do not expose Alfix to the public internet! It is not written to even
-try to be secure in any way, and almost certainly have no permission to
+Do not expose Alfix to the public internet! It is not written 
+be secure in any way, and almost certainly you have no permission to
 share the eLearn content to anybody else.
 
 ## Installation ##
+
+### On Fedora
+On Fedora (>= 24) installing this should ensure you have everything
+needed to setup and run the software:
+
+    # dnf install python3-lxml innoextract mdbtools sqlite dos2unix firefox
 
 Replace `<path-to-cd>` with the path your CD or iso-image is mounted.
 For example, by default Fedora 24 mounts Alfa 156 eLearn CD at
