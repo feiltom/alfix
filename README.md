@@ -50,11 +50,13 @@ share the eLearn content to anybody else.
 
 ## Installation ##
 
-### On Fedora
+### Installing dependencies (Fedora)
 On Fedora (>= 24) installing this should ensure you have everything
 needed to setup and run the software:
 
     # dnf install python3-lxml innoextract mdbtools sqlite dos2unix firefox
+
+### Installing Alfix
 
 Replace `<path-to-cd>` with the path your CD or iso-image is mounted.
 For example, by default Fedora 24 mounts Alfa 156 eLearn CD at
