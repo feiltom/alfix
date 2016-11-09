@@ -73,7 +73,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_href(self, val):
         qs = []
-        for k in ['production', 'validity']:
+        for k in ['production', 'validity', 'language']:
             if not k in self.q:
                 continue
             qs.append('%s=%s' % (k, self.q[k]))
@@ -111,6 +111,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 'select xml_id from xml_production',
                 'where production_id=%s' % q.get('production'),
                 '))',
+            'and', 'language_id = %s' % q.get('language')
         ])
 
         xsql = mkquery([
@@ -136,8 +137,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_sections(self):
         q = mkquery([ 'select * from element,section',
-                      'where root_elem_id = element.id'
+                      'where root_elem_id = element.id',
+                      'and', 'element.language_id = %s' % self.q.get('language')
                     ])
+        print(q)
         elements = fetch(self.db, q)
 
         self.do_elements('sections', elements, cls='menutxt')
@@ -155,6 +158,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 'select element_id from element_production',
                 'where production_id=%s' % q.get('production'),
                 '))',
+            'and', 'language_id = %s' % q.get('language')
         ])
         elements = fetch(self.db, sql)
 
@@ -164,7 +168,13 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             self.element_view(q)
 
     def do_selection(self, what):
-        values = fetch(self.db, 'select * from %s' % what)
+        q = ['select distinct * from %s' % what ]
+        if what == 'language':
+            # filter out non-installed languages
+            q.append('where id in (select distinct language_id from validity)')
+        else:
+            q.append('where language_id = %s' % self.q.get('language'))
+        values = fetch(self.db, mkquery(q, order=False))
 
         self.do_elements('contents', values, what)
 
@@ -214,7 +224,9 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     def do_database(self):
         self.page = mkpage(myname)
 
-        if not (self.q.get('validity')):
+        if not (self.q.get('language')):
+            self.do_selection('language')
+        elif not (self.q.get('validity')):
             self.do_selection('validity')
         elif not (self.q.get('production')):
             self.do_selection('production')

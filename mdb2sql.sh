@@ -11,13 +11,17 @@ echo "creating schema..."
 mdb-schema --no-relations "${mdb}" sqlite | sqlite3 "${dbfile}"
 
 # import db contents
-for table in $(mdb-tables "${mdb}"); do
-	echo "importing table ${table}"
-	f=$(mktemp)
-	mdb-export -H -d '|' "${mdb}" "${table}" > "${f}"
-	dos2unix -q "${f}"
-	sqlite3 "${dbfile}" ".mode csv" ".separator |" ".import ${f} ${table}"
-	rm -f ${f}
+for mdb in ${cdpath}/database/elearn_*.dat; do
+    echo "importing database $(basename ${mdb})"...
+    for table in $(mdb-tables "${mdb}"); do
+	    echo "  importing table ${table}"
+	    f=$(mktemp)
+	    mdb-export -H -d '|' "${mdb}" "${table}" > "${f}"
+	    dos2unix -q "${f}"
+	    sqlite3 "${dbfile}" ".mode csv" ".separator |" ".import ${f} ${table}"
+	    rm -f ${f}
+    done
+    echo "done"
 done
 
 echo "done"
