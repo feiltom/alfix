@@ -140,7 +140,6 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                       'where root_elem_id = element.id',
                       'and', 'element.language_id = %s' % self.q.get('language')
                     ])
-        print(q)
         elements = fetch(self.db, q)
 
         self.do_elements('sections', elements, cls='menutxt')
