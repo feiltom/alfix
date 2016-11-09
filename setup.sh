@@ -12,21 +12,20 @@ cdpath="$(realpath "$1")"
 
 [ -e "${cdpath}"/elearn.ico ] || error "${cdpath}: not an elearn image"
 
-mkdir app csv
-./mdb2csv.sh "$cdpath"
-./csv2sql.sh "$cdpath"
+mkdir app
+./mdb2sql.sh "$cdpath"
 
 innoextract -s -I app/Web "${cdpath}/setup.exe"
-find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"|xargs dos2unix
+find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"|xargs dos2unix -q
 
 cddev=$(stat --format "%D" "${cdpath}")
 mydev=$(stat --format "%D" .)
 
 if [ "${cddev}" = "${mydev}" ]; then
-    echo "Linking images..."
+    echo "linking images..."
     cp -as "${cdpath}/image" app/Web/
 else
-    echo "Copying images..."
+    echo "copying images..."
     cp -a "${cdpath}/image" app/Web/
 fi
 
