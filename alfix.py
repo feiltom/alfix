@@ -124,6 +124,11 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         xslpath = fetch(self.db, xsql)[0]['XSL']
 
         xslt_root = etree.parse(open('%s/%s' % (web_base, xslpath)))
+
+        # XXX hack: lxml barfs on some javascript thing from xslt, drop it
+        for x in xslt_root.xpath('//script'):
+            x.getparent().remove(x)
+
         transform = etree.XSLT(xslt_root)
 
         contents = self.page.get_element_by_id('contents')
