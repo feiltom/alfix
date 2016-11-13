@@ -18,7 +18,18 @@ lcname = myname.lower()
 dbpath='app/%s.db' % lcname
 web_base = 'app/Web/'
 
-def fetch(db, sql):
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+def fetch(db, sql, as_dict=False):
+    if as_dict:
+        db.row_factory = dict_factory
+    else:
+        db.row_factory = sqlite3.Row
+
     c = db.cursor()
     c.execute(sql)
     rows = c.fetchall()
@@ -26,7 +37,10 @@ def fetch(db, sql):
     return rows
 
 def codename(e):
-    return ' '.join([e['CODE'], e['NAME']])
+    r = [e['CODE'], e['NAME']]
+    if 'CODEP_NAME' in e.keys():
+        r.append('(%s)' % e['CODEP_NAME'])
+    return ' '.join(r)
 
 def mkquery(sql, order=True):
     if order:
@@ -72,7 +86,6 @@ class myServer(socketserver.TCPServer):
 class myHandler(http.server.SimpleHTTPRequestHandler):
 
     db = sqlite3.connect(dbpath)
-    db.row_factory = sqlite3.Row
     part = 'models'
 
     def do_href(self, val):
@@ -153,6 +166,23 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
         self.do_elements('sections', elements, cls='menutxt')
 
+    def do_codep(self, e):
+        ret = False
+        if 'ALL_CODEP' in e.keys() and e['ALL_CODEP'] == 0:
+            sql = mkquery([
+                    'select name',
+                    'from codep',
+                    'where codep.id in (',
+                        'select codep_id',
+                        'from element_codep',
+                        'where element_id=%s)' % e['ID']
+            ], order=False)
+            for r in fetch(self.db, sql):
+                e['CODEP_NAME'] = r['NAME']
+                ret = True
+                break
+        return ret
+
     def do_contents(self, q):
         sql = mkquery([
             'select element.*',
@@ -168,7 +198,9 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 '))',
             'and', 'language_id = %s' % q.get('language')
         ])
-        elements = fetch(self.db, sql)
+        elements = fetch(self.db, sql, as_dict=True)
+        for e in elements:
+            self.do_codep(e)
 
         if elements:
             self.do_elements('contents', elements)
@@ -220,9 +252,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     def do_path(self):
         path = self.page.get_element_by_id('path')
         rows = fetch(self.db,
-                    'select code, name from element where id=%s' %
-                    self.q.get('elemid'))
+                    'select * from element where id=%s' % self.q.get('elemid'),
+                    as_dict=True)
         for r in rows:
+            self.do_codep(r)
             path.text = codename(r)
             break
 
