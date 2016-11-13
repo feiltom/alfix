@@ -5,6 +5,7 @@ import sqlite3
 import http.server
 import socketserver
 import socket
+import gzip
 from lxml import etree
 from lxml import html
 from lxml.html import builder as E
@@ -185,12 +186,9 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
         self.do_elements('contents', values, what)
 
-    def do_page(self):
-        out = html.tostring(self.page,
-                            pretty_print=True,
-                            doctype='<!DOCTYPE html>')
+    def do_page(self, ctype, out):
         self.send_response(HTTPStatus.OK)
-        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.send_header('Content-type', ctype)
         self.send_header('Content-Length', len(out))
         self.end_headers()
 
@@ -246,17 +244,37 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 self.do_path()
 
 
-        self.do_page()
+        out = html.tostring(self.page,
+                            pretty_print=True,
+                            doctype='<!DOCTYPE html>')
+        self.do_page('text/html; charset=utf-8', out)
+
+    def do_svg(self):
+        f = gzip.open(self.path)
+        # The SVG files specify an undefined &ns_graphs entity on which
+        # at least Firefox barfs on. Parsing the SVG file with entity
+        # resolving disabled strips off this anomaly.
+        parser = etree.XMLParser(resolve_entities=False)
+        svg = etree.parse(f, parser=parser)
+        out = etree.tostring(svg)
+        f.close()
+
+        self.do_page('image/svg+xml', out)
 
     def do_GET(self):
         self.p = urlparse(self.path)
+
 
         if self.p.path in [ '/' ]:
             self.q = dict(parse_qsl(self.p.query))
             return self.do_database()
         else:
             self.path = web_base + self.path
-            return http.server.SimpleHTTPRequestHandler.do_GET(self)
+            # SVG files are compressed and need some other love too
+            if self.guess_type(self.path) == 'application/octet-stream':
+                return self.do_svg()
+            else:
+                return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 if __name__ == '__main__':
     HOST = 'localhost'
