@@ -24,6 +24,9 @@ def fetch(db, sql):
     c.close()
     return rows
 
+def codename(e):
+    return ' '.join([e['CODE'], e['NAME']])
+
 def mkquery(sql, order=True):
     if order:
         sql.append('order by orders')
@@ -86,7 +89,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         for e in elements:
             row = E.TR(
                     E.TD(E.CLASS(cls),
-                      E.A(E.CLASS(cls), e['NAME'],
+                      E.A(E.CLASS(cls), '%s' % (codename(e)),
                           href=self.do_href('%s=%s' % (what, e['ID'])))
                     )
                   )
@@ -219,10 +222,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     def do_path(self):
         path = self.page.get_element_by_id('path')
         rows = fetch(self.db,
-                    'select name from element where id=%s' %
+                    'select code, name from element where id=%s' %
                     self.q.get('elemid'))
         for r in rows:
-            path.text = r['NAME']
+            path.text = codename(r)
             break
 
     def do_database(self):
