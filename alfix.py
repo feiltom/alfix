@@ -300,17 +300,24 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                             doctype='<!DOCTYPE html>')
         self.do_page('text/html; charset=utf-8', out)
 
-    def do_svg(self):
-        f = gzip.open(self.path)
-        # The SVG files specify an undefined &ns_graphs entity on which
-        # at least Firefox barfs on. Parsing the SVG file with entity
-        # resolving disabled strips off this anomaly.
-        parser = etree.XMLParser(resolve_entities=False)
-        svg = etree.parse(f, parser=parser)
-        out = etree.tostring(svg)
-        f.close()
+    def do_image(self):
+        try:
+            f = gzip.open(self.path)
+            # The SVG files specify an undefined &ns_graphs entity on which
+            # at least Firefox barfs on. Parsing the SVG file with entity
+            # resolving disabled strips off this anomaly.
+            parser = etree.XMLParser(resolve_entities=False)
+            svg = etree.parse(f, parser=parser)
+            out = etree.tostring(svg)
+            t = 'image/svg+xml'
+        except OSError:
+            f = open(self.path, 'rb')
+            out = f.read()
+            t = 'image/jpeg'
+        finally:
+            f.close()
 
-        self.do_page('image/svg+xml', out)
+        self.do_page(t, out)
 
     def do_GET(self):
         self.p = urlparse(self.path)
@@ -323,7 +330,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             self.path = web_base + self.path
             # SVG files are compressed and need some other love too
             if self.guess_type(self.path) == 'application/octet-stream':
-                return self.do_svg()
+                return self.do_image()
             else:
                 return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
