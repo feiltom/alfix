@@ -65,6 +65,7 @@ td.header_table{
 #pathrow {
     background-color: rgb(206,0,0);
     height: 32px;
+    text-transform: uppercase;
 }
 
 #sections {

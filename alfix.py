@@ -261,13 +261,21 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_path(self):
         path = self.page.get_element_by_id('path')
-        rows = fetch(self.db,
-                    'select * from element where id=%s' % self.q.get('elemid'),
+        eid = self.q.get('elemid')
+        while True:
+            rows = fetch(self.db,
+                    'select * from element where id=%s' % eid,
                     as_dict=True)
-        for r in rows:
-            self.do_codep(r)
-            path.text = codename(r)
-            break
+            if len(rows) < 1:
+                break
+            for r in rows:
+                self.do_codep(r)
+                z = E.A(E.CLASS('menutxt'), '%s' % (codename(r)),
+                        href=self.do_href('elemid=%s' % (r['ID'])))
+                if path:
+                    path.insert(0, E.A(' > '))
+                path.insert(0, z)
+                eid = r['PARENT_ID']
 
     def do_database(self):
         self.page = mkpage(myname)
