@@ -155,6 +155,16 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             tbl = res.find('//table')
             contents.append(tbl)
 
+
+        if self.page.find_class('electrical'):
+            # add back the script we nuked in the above
+            contents.append(E.SCRIPT(language='javascript',
+                                     src='./svgscript/mysvg.js'))
+            # let the svg use all available space
+            for x in self.page.find_class('electrical'):
+                del x.attrib['width']
+                del x.attrib['height']
+
         self.page.rewrite_links(self.refnodefix)
 
     def do_sections(self):
