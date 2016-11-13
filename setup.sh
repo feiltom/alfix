@@ -30,3 +30,5 @@ else
 fi
 
 ln -s ../../../alfix.css app/Web/css/
+
+perl -pi -e "s:a.getDocumentElement\(\):a.documentElement:g" app/Web/svgscript/mysvg.js
