@@ -37,7 +37,11 @@ def fetch(db, sql, as_dict=False):
     return rows
 
 def codename(e):
-    r = [e['CODE'], e['NAME']]
+    keys = ['CODE', 'NAME']
+    r = []
+    for k in keys:
+        if k in e.keys():
+            r.append(e[k])
     if 'CODEP_NAME' in e.keys():
         r.append('(%s)' % e['CODEP_NAME'])
     return ' '.join(r)
@@ -218,7 +222,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             self.element_view(q)
 
     def do_selection(self, what):
-        q = ['select distinct * from %s' % what ]
+        q = ['select distinct id, name from %s' % what ]
         if what == 'language':
             # filter out non-installed languages
             q.append('where id in (select distinct language_id from validity)')
