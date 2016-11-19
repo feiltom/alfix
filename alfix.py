@@ -232,7 +232,12 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             q.append('where language_id = %s' % self.q.get('language'))
         values = fetch(self.db, mkquery(q, order=False))
 
-        self.do_elements('contents', values, what)
+        if len(values) == 1:
+            self.q[what] = values[0]['ID']
+            return True
+        else:
+            self.do_elements('contents', values, what)
+            return False
 
     def do_page(self, ctype, out):
         self.send_response(HTTPStatus.OK)
@@ -288,8 +293,8 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
         for item in self.qelem:
             if not self.q.get(item):
-                self.do_selection(item)
-                break
+                if not self.do_selection(item):
+                    break
 
         if self.q.get('validity') and self.q.get('production'):
             self.do_model()
