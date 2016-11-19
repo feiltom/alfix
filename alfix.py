@@ -92,7 +92,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     db = sqlite3.connect(dbpath)
     part = 'models'
 
-    qelem = ['language', 'validity', 'production']
+    qelem = ['language', 'model', 'validity', 'production']
 
     def do_href(self, val):
         qs = []
