@@ -92,9 +92,11 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     db = sqlite3.connect(dbpath)
     part = 'models'
 
+    qelem = ['language', 'validity', 'production']
+
     def do_href(self, val):
         qs = []
-        for k in ['production', 'validity', 'language']:
+        for k in self.qelem:
             if not k in self.q:
                 continue
             qs.append('%s=%s' % (k, self.q[k]))
@@ -284,12 +286,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     def do_database(self):
         self.page = mkpage(myname)
 
-        if not (self.q.get('language')):
-            self.do_selection('language')
-        elif not (self.q.get('validity')):
-            self.do_selection('validity')
-        elif not (self.q.get('production')):
-            self.do_selection('production')
+        for item in self.qelem:
+            if not self.q.get(item):
+                self.do_selection(item)
+                break
 
         if self.q.get('validity') and self.q.get('production'):
             self.do_model()
