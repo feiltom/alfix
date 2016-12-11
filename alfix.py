@@ -79,6 +79,21 @@ def mkpage(title):
            )
     return html
 
+def mkxform(db):
+    rows = fetch(db, 'select * from xsl')
+    xform = {}
+    for r in rows:
+        xslpath = r['XSL']
+        xslt_root = etree.parse(open('%s/%s' % (web_base, xslpath)))
+
+        # XXX hack: lxml barfs on some javascript thing from xslt, drop it
+        for x in xslt_root.xpath('//script'):
+            x.getparent().remove(x)
+
+        xform[r['section_type']] = etree.XSLT(xslt_root)
+
+    return xform
+
 class myServer(socketserver.TCPServer):
     def server_bind(self):
         host, port = self.socket.getsockname()[:2]
@@ -93,6 +108,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
     part = 'models'
 
     qelem = ['language', 'model', 'validity', 'production']
+    xform = mkxform(db)
 
     def do_href(self, val):
         qs = []
@@ -138,21 +154,12 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         ])
 
         xsql = mkquery([
-                'select xsl from xsl',
-                'where section_type in (',
-                    'select section.type from section, element',
-                    'where element.section_id=section.id',
-                    'and element.id=%s)' % q.get('elemid')
+                'select type from section, element',
+                'where element.section_id=section.id',
+                'and element.id=%s' % q.get('elemid')
         ], order=False)
-        xslpath = fetch(self.db, xsql)[0]['XSL']
-
-        xslt_root = etree.parse(open('%s/%s' % (web_base, xslpath)))
-
-        # XXX hack: lxml barfs on some javascript thing from xslt, drop it
-        for x in xslt_root.xpath('//script'):
-            x.getparent().remove(x)
-
-        transform = etree.XSLT(xslt_root)
+        sect_type = fetch(self.db, xsql)[0]['TYPE']
+        transform = self.xform[sect_type]
 
         contents = self.page.get_element_by_id('contents')
         for i in fetch(self.db, sql):
