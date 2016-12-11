@@ -13,8 +13,8 @@ cdpath="$(realpath "$1")"
 [ -e "${cdpath}"/elearn.ico ] || error "${cdpath}: not an elearn image"
 
 mkdir app
-./mdb2sql.sh "$cdpath"
 
+echo "extracting data..."
 innoextract -s -I app/Web "${cdpath}/setup.exe"
 find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"|xargs dos2unix -q
 
@@ -32,3 +32,5 @@ fi
 ln -s ../../../alfix.css app/Web/css/
 
 perl -pi -e "s:a.getDocumentElement\(\):a.documentElement:g" app/Web/svgscript/mysvg.js
+
+./mdb2sql.sh "$cdpath"
