@@ -290,7 +290,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 self.do_codep(r)
                 z = E.A(E.CLASS('menutxt'), '%s' % (codename(r)),
                         href=self.do_href('elemid=%s' % (r['ID'])))
-                if path:
+                if len(path) > 0:
                     path.insert(0, E.A(' > '))
                 path.insert(0, z)
                 eid = r['PARENT_ID']
