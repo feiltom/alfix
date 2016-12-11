@@ -24,4 +24,6 @@ for mdb in ${cdpath}/database/elearn_${langid}.dat; do
     echo "done"
 done
 
+echo "regenerating searchable text..."
+./xml2txt.py ${dbfile}
 echo "done"
