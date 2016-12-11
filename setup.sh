@@ -17,6 +17,7 @@ mkdir app
 echo "extracting data..."
 innoextract -s -I app/Web "${cdpath}/setup.exe"
 find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"|xargs dos2unix -q
+find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"| xargs perl -pi -e "s:\\\:/:g"
 
 cddev=$(stat --format "%D" "${cdpath}")
 mydev=$(stat --format "%D" .)
