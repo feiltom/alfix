@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pname=alfix
-langid="2"
+langid="${2:-2}"
 cdpath="$1"
 dbfile="app/${pname}.db"
 mdb="${cdpath}/database/elearn_${langid}.dat"
@@ -11,7 +11,7 @@ echo "creating schema..."
 mdb-schema --no-relations "${mdb}" sqlite | sqlite3 "${dbfile}"
 
 # import db contents
-for mdb in ${cdpath}/database/elearn_*.dat; do
+for mdb in ${cdpath}/database/elearn_${langid}.dat; do
     echo "importing database $(basename ${mdb})"...
     for table in $(mdb-tables "${mdb}"); do
 	    echo "  importing table ${table}"
