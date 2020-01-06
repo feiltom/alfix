@@ -58,23 +58,30 @@ def mkpage(title):
                E.LINK(rel='stylesheet', href='css/%s.css' % lcname, type='text/css'),
              ),
              E.BODY(
+              E.TABLE(E.TR(E.TD(
                E.TABLE(
                  E.TR(
                    E.TD(E.A(E.CLASS('menutxt'), myname, href='/'), id='logobar'),
-                   E.TD('', id='menubar'),
+                   E.TD(E.CLASS('menutxt'), '', id='model'),
                    id='toprow',
                  ),
+               ),
+               E.TABLE(
+                 E.TR(id='sections'),
+               ),
+               E.TABLE(
                  E.TR(
-                   E.TD(E.CLASS('labeltxt'), '', id='model'),
                    E.TD(E.CLASS('labeltxt'), '', id='path'),
                    id='pathrow',
                  ),
+               ),
+               E.TABLE(
                  E.TR(
-                   E.TD(id='sections'),
                    E.TD(id='contents'),
                  ),
-                 id='maintable',
                ),
+              )), id='maintable',
+              ),
              ),
            )
     return html
@@ -187,7 +194,15 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                     ])
         elements = fetch(self.db, q)
 
-        self.do_elements('sections', elements, cls='menutxt')
+        row = self.page.get_element_by_id('sections')
+        cls = 'menutxt'
+        what = 'elemid'
+        for e in elements:
+            cell = E.TD(E.CLASS(cls),
+                      E.A(E.CLASS(cls), '%s' % (codename(e)),
+                          href=self.do_href('%s=%s' % (what, e['ID'])))
+                   )
+            row.append(cell)
 
     def do_codep(self, e):
         ret = False

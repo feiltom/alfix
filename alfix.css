@@ -4,8 +4,13 @@ a {
     text-decoration: none;
 }
 
+table {
+    width: 100%;
+}
+
 .menutxt {
     color: white;
+    background-color: rgb(206,0,0);
 }
 
 .labeltxt {
@@ -32,10 +37,6 @@ td.header_table{
     width:1%;
 }
 
-#maintable {
-    width: 100%;
-}
-
 #toprow {
     height: 64px;
 }
@@ -53,7 +54,9 @@ td.header_table{
     vertical-align: center;
 }
 
-#menubar {
+#model {
+    text-align: center;
+    font-weight: bold;
     width: 80%;
     background: linear-gradient(to right,
 				#555555 0%,
