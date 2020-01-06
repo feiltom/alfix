@@ -56,6 +56,7 @@ def mkpage(title):
              E.HEAD(
                E.TITLE(title, id='title'),
                E.LINK(rel='stylesheet', href='css/%s.css' % lcname, type='text/css'),
+               E.META(name='viewport', content='width=device-width, initial-scale=1.0'),
              ),
              E.BODY(
               E.TABLE(E.TR(E.TD(
