@@ -16,7 +16,7 @@ from http import HTTPStatus
 myname = 'Alfix'
 lcname = myname.lower()
 dbpath='app/%s.db' % lcname
-web_base = 'app/Web/'
+web_base = 'app/Web'
 
 def dict_factory(cursor, row):
     d = {}
@@ -340,6 +340,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             # resolving disabled strips off this anomaly.
             parser = etree.XMLParser(resolve_entities=False)
             svg = etree.parse(f, parser=parser)
+            svg.getroot().set("xmlns", "http://www.w3.org/2000/svg")
             out = etree.tostring(svg)
             t = 'image/svg+xml'
         except OSError:
