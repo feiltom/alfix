@@ -1,6 +1,4 @@
-#!/usr/bin/python3
-
-
+#!/usr/local/bin/python3
 import sqlite3
 import http.server
 import socketserver
@@ -16,7 +14,7 @@ from http import HTTPStatus
 myname = 'Alfix'
 lcname = myname.lower()
 dbpath='app/%s.db' % lcname
-web_base = 'app/Web/'
+web_base = 'app/Web'
 
 def dict_factory(cursor, row):
     d = {}
@@ -340,6 +338,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             # resolving disabled strips off this anomaly.
             parser = etree.XMLParser(resolve_entities=False)
             svg = etree.parse(f, parser=parser)
+            svg.getroot().set("xmlns", "http://www.w3.org/2000/svg")
             out = etree.tostring(svg)
             t = 'image/svg+xml'
         except OSError:
@@ -367,7 +366,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 if __name__ == '__main__':
-    HOST = 'localhost'
+    HOST = '0.0.0.0'
     PORT = 8000
     Handler = myHandler
     httpd = myServer((HOST, PORT), Handler)

@@ -22,13 +22,9 @@ find app/ -name "*.xsl" -o -name "*.ehtm" -o -name "*.css" -o -name "*.js"| xarg
 cddev=$(stat --format "%D" "${cdpath}")
 mydev=$(stat --format "%D" .)
 
-if [ "${cddev}" = "${mydev}" ]; then
-    echo "linking images..."
-    cp -as "${cdpath}/image" app/Web/
-else
-    echo "copying images..."
-    cp -a "${cdpath}/image" app/Web/
-fi
+echo "copying images..."
+cp -a "${cdpath}/Image" app/Web/
+mv app/Web/Image app/Web/image
 
 ln -s ../../../alfix.css app/Web/css/
 
